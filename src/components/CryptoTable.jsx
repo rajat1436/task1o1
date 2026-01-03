@@ -7,30 +7,30 @@ const CryptoTable = ({ data, loading }) => {
   }
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl overflow-hidden">
+    <div className="bg-gradient-to-br from-slate-800 to-slate-800/50 border border-slate-700/50 rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full min-w-[800px]">
           <thead>
-            <tr className="bg-slate-900/50 border-b border-slate-700/50">
-              <th className="px-4 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <tr className="bg-slate-900/70">
+              <th className="px-4 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider w-16">
                 #
               </th>
-              <th className="px-4 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <th className="px-4 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider min-w-[200px]">
                 Name
               </th>
-              <th className="px-4 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <th className="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-wider w-32">
                 Price
               </th>
-              <th className="px-4 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <th className="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-wider w-32">
                 24h Change
               </th>
-              <th className="px-4 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider hidden md:table-cell">
+              <th className="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-wider w-36 hidden md:table-cell">
                 Market Cap
               </th>
-              <th className="px-4 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider hidden lg:table-cell">
+              <th className="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-wider w-36 hidden lg:table-cell">
                 Volume (24h)
               </th>
-              <th className="px-4 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider hidden xl:table-cell">
+              <th className="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-wider w-44 hidden xl:table-cell">
                 Circulating Supply
               </th>
             </tr>
@@ -39,12 +39,12 @@ const CryptoTable = ({ data, loading }) => {
             {data.map((coin, index) => (
               <tr
                 key={coin.id}
-                className="table-row-hover stagger-animation"
-                style={{ animationDelay: `${index * 30}ms` }}
+                className="hover:bg-slate-700/30 transition-colors duration-150"
+                style={{ animationDelay: `${index * 20}ms` }}
               >
                 {/* Rank */}
                 <td className="px-4 py-4 whitespace-nowrap">
-                  <span className="text-sm font-medium text-slate-400">{coin.rank}</span>
+                  <span className="text-sm font-bold text-slate-500">{coin.rank}</span>
                 </td>
 
                 {/* Name & Symbol */}
@@ -54,68 +54,68 @@ const CryptoTable = ({ data, loading }) => {
                       <img
                         src={coin.imageUrl}
                         alt={coin.name}
-                        className="w-8 h-8 rounded-full bg-slate-700"
+                        className="w-9 h-9 rounded-full bg-slate-700 flex-shrink-0"
                         onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '';
                           e.target.style.display = 'none';
                         }}
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                        <span className="text-xs font-bold text-white">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                        <span className="text-sm font-bold text-white">
                           {coin.symbol?.charAt(0)}
                         </span>
                       </div>
                     )}
-                    <div>
-                      <p className="font-semibold text-white">{coin.name}</p>
-                      <p className="text-sm text-slate-400">{coin.symbol}</p>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-white truncate">{coin.name}</p>
+                      <p className="text-sm text-slate-400 font-medium">{coin.symbol}</p>
                     </div>
                   </div>
                 </td>
 
                 {/* Price */}
-                <td className="px-4 py-4 whitespace-nowrap text-right">
-                  <span className="font-mono font-semibold text-white">
+                <td className="px-6 py-4 whitespace-nowrap text-right">
+                  <span className="font-mono font-semibold text-white text-sm">
                     {formatPrice(coin.price)}
                   </span>
                 </td>
 
                 {/* 24h Change */}
-                <td className="px-4 py-4 whitespace-nowrap text-right">
-                  <div
-                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-sm font-semibold ${
-                      coin.change24h >= 0
-                        ? 'bg-green-500/10 text-green-400'
-                        : 'bg-red-500/10 text-red-400'
+                <td className="px-6 py-4 whitespace-nowrap text-right">
+                  <span
+                    className={`inline-flex items-center justify-end gap-1 font-mono text-sm font-semibold ${
+                      coin.change24h >= 0 ? 'text-green-400' : 'text-red-400'
                     }`}
                   >
                     {coin.change24h >= 0 ? (
-                      <TrendingUp className="w-3 h-3" />
+                      <TrendingUp className="w-3.5 h-3.5" />
                     ) : (
-                      <TrendingDown className="w-3 h-3" />
+                      <TrendingDown className="w-3.5 h-3.5" />
                     )}
                     {formatPercentage(coin.change24h)}
-                  </div>
+                  </span>
                 </td>
 
                 {/* Market Cap */}
-                <td className="px-4 py-4 whitespace-nowrap text-right hidden md:table-cell">
-                  <span className="font-mono text-slate-300">
+                <td className="px-6 py-4 whitespace-nowrap text-right hidden md:table-cell">
+                  <span className="font-mono text-sm text-slate-300">
                     {formatCurrency(coin.marketCap)}
                   </span>
                 </td>
 
                 {/* Volume */}
-                <td className="px-4 py-4 whitespace-nowrap text-right hidden lg:table-cell">
-                  <span className="font-mono text-slate-300">
+                <td className="px-6 py-4 whitespace-nowrap text-right hidden lg:table-cell">
+                  <span className="font-mono text-sm text-slate-300">
                     {formatCurrency(coin.volume24h)}
                   </span>
                 </td>
 
                 {/* Supply */}
-                <td className="px-4 py-4 whitespace-nowrap text-right hidden xl:table-cell">
-                  <span className="font-mono text-slate-300">
-                    {formatSupply(coin.supply)} {coin.symbol}
+                <td className="px-6 py-4 whitespace-nowrap text-right hidden xl:table-cell">
+                  <span className="font-mono text-sm text-slate-300">
+                    {formatSupply(coin.supply)} <span className="text-slate-500">{coin.symbol}</span>
                   </span>
                 </td>
               </tr>
@@ -126,9 +126,9 @@ const CryptoTable = ({ data, loading }) => {
 
       {/* Empty State */}
       {data.length === 0 && !loading && (
-        <div className="p-12 text-center">
-          <p className="text-slate-400 text-lg">No cryptocurrencies found</p>
-          <p className="text-slate-500 text-sm mt-1">
+        <div className="p-16 text-center">
+          <p className="text-slate-400 text-lg font-medium">No cryptocurrencies found</p>
+          <p className="text-slate-500 text-sm mt-2">
             Try adjusting your search or filters
           </p>
         </div>
